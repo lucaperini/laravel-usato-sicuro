@@ -17,6 +17,14 @@
             @if ($car->is_new)
             <span class=" badge bg-info">Nuova</span>
             @endif
+
+            <br>
+            <a href="{{ route('cars.edit', compact('car'))}}" class="btn btn-warning">Modifica</a>
+            <form action="{{ route('cars.destroy', compact('car'))}}" method="POST" class="d-inline">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn btn-danger">Elimina</button>
+            </form>
         </div>
     </div>
 </main>

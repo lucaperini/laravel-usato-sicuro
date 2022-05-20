@@ -39,13 +39,13 @@ class CarController extends Controller
     {
         $data = $request->all();
         $car = new Car();
-        $car->numero_telaio= $data["numero_telaio"];
-        $car->model=$data["model"];
-        $car->porte=$data["porte"];
-        $car->data_immatricolazione=$data["data_immatricolazione"];
-        $car->marca=$data["marca"];
-        $car->alimentazione=$data["alimentazione"];
-        $car->prezzo=$data["prezzo"];
+        $car->numero_telaio = $data["numero_telaio"];
+        $car->model = $data["model"];
+        $car->porte = $data["porte"];
+        $car->data_immatricolazione = $data["data_immatricolazione"];
+        $car->marca = $data["marca"];
+        $car->alimentazione = $data["alimentazione"];
+        $car->prezzo = $data["prezzo"];
         $car->save();
 
         return redirect()->route("cars.show", $car->id);
@@ -59,7 +59,7 @@ class CarController extends Controller
      */
     public function show($id)
     {
-        $car= Car::findOrFail($id);
+        $car = Car::findOrFail($id);
         return view("cars.show", compact("car"));
     }
 
@@ -69,9 +69,9 @@ class CarController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Car $car)
     {
-        //
+        return view('cars.edit', compact('car'));
     }
 
     /**
@@ -81,9 +81,36 @@ class CarController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Car $car)
     {
-        //
+        $request->validate([
+            'numero_telaio' => 'required|max:20',
+            'model' => 'required|max:20',
+            'porte' => 'required|numeric',
+            'data_immatricolazione' => 'required|date',
+            'marca' => 'required',
+            'alimentazione' => 'required',
+            'prezzo' => 'required|numeric',
+            'is_new' => 'required'
+        ], [
+            'required' => 'Non puoi aggiungere una Car senza :attribute',
+            'numeric' => 'Il valore :attribute deve essere numerico',
+            'date' => 'Deve essere una data!',
+            'max' => ':attribute deve essere lungo massimo 20 caratteri',
+        ]);
+
+        $data = $request->all();
+
+        $car->numero_telaio = $data["numero_telaio"];
+        $car->model = $data["model"];
+        $car->porte = $data["porte"];
+        $car->data_immatricolazione = $data["data_immatricolazione"];
+        $car->marca = $data["marca"];
+        $car->alimentazione = $data["alimentazione"];
+        $car->prezzo = $data["prezzo"];
+        $car->save();
+
+        return redirect()->route("cars.show", $car->id);
     }
 
     /**
@@ -92,8 +119,9 @@ class CarController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Car $car)
     {
-        //
+        $car->delete();
+        return redirect()->route("cars.index")->with('message', 'Car eliminata correttamente');
     }
 }

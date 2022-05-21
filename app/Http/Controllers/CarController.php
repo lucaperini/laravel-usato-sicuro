@@ -27,6 +27,7 @@ class CarController extends Controller
     public function create()
     {
         return view("cars.create");
+
     }
 
     /**
@@ -39,16 +40,26 @@ class CarController extends Controller
     {
         $data = $request->all();
         $car = new Car();
-        $car->numero_telaio = $data["numero_telaio"];
-        $car->model = $data["model"];
-        $car->porte = $data["porte"];
-        $car->data_immatricolazione = $data["data_immatricolazione"];
-        $car->marca = $data["marca"];
-        $car->alimentazione = $data["alimentazione"];
-        $car->prezzo = $data["prezzo"];
+        // $car->numero_telaio = $data["numero_telaio"];
+        // $car->model = $data["model"];
+        // $car->porte = $data["porte"];
+        // $car->data_immatricolazione = $data["data_immatricolazione"];
+        // $car->marca = $data["marca"];
+        // $car->alimentazione = $data["alimentazione"];
+        // $car->prezzo = $data["prezzo"];
+        // $car->save();
+
+        $car->fill(['numero_telaio'=>$data["numero_telaio"]]);
+        $car->fill(['model'=>$data["model"]]);
+        $car->fill(['porte'=>$data["porte"]]);
+        $car->fill(['data_immatricolazione'=>$data["data_immatricolazione"]]);
+        $car->fill(['marca'=>$data["marca"]]);
+        $car->fill(['alimentazione'=>$data["alimentazione"]]);
+        $car->fill(['prezzo'=>$data["prezzo"]]);
         $car->save();
 
-        return redirect()->route("cars.show", $car->id);
+
+        return redirect()->route("cars.show", $car->id)->with ('message', 'Auto aggiornata con successo');
     }
 
     /**
